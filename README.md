@@ -1,8 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>CWautoMacros</title>
 </head>
 <body>
 
@@ -13,7 +11,8 @@ that uses <i>cwautomacros</i>.</p>
 
 <p>If you have been sent here after running `autogen.sh', then
 get the cwautomacros sources with <a href="https://github.com/CarloWood/cwautomacros">Anonymous git access</a>,
-or download the latest <a href="https://github.com/CarloWood/cwautomacros/releases">tar ball</a>.</p>
+or download the latest (source) <a href="https://github.com/CarloWood/cwautomacros/releases">tar ball</a>.
+To install simply untar and run <code>sudo make install</code>; no compilation is needed.</p>
 
 <p>It's all plug-and-play: the files and scripts are installed under <code>/usr/share/cwautomacros</code>
 (or in <code>$CWAUTOMACROSPREFIX/share/cwautomacros</code> if you set that environment variable).

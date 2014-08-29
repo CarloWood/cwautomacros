@@ -16,7 +16,5 @@ done
 tar cjf "$name".tar.bz2 "$name"
 rm -rf "$name"
 
-./release_doc
-
-echo "https://github.com/CarloWood/cwautomacros/releases"
-echo "Release Name: $label"
+echo "Add tag on https://github.com/CarloWood/cwautomacros/releases"
+echo "Release tag: $label"
