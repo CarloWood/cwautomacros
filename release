@@ -1,0 +1,25 @@
+# Maintainer script (to make a new release).
+
+label=$(date +%Y%m%d)
+echo $label > version
+name="cwautomacros-$label"
+mkdir "$name" || exit 1
+cat m4/CW_AUTOMACROS.m4.in | sed -e 's/@VERSION@/'"$label"'/' > m4/CW_AUTOMACROS.m4
+files=$(svn stat --verbose --non-interactive | sed -re 's/.*[[:space:]]//' -e 's/\.m4\.in/.m4/')
+for f in version $files; do
+  if test -f "$f"; then
+    dir=$(dirname "$f")
+    test -d "$name/$dir" || mkdir -p "$name/$dir"
+    cp "$f" "$name/$f"
+  fi
+done
+tar cjf "$name".tar.bz2 "$name"
+rm -rf "$name"
+
+./release_doc
+
+echo "http://developer.berlios.de/project/admin/qrs.php?package_id=&group_id=6077"
+echo "Release Name: $label"
+echo "File Type: Source .bz2"
+echo "Processor Type: Any"
+echo "Upload file: $(pwd)/$name.tar.bz2"

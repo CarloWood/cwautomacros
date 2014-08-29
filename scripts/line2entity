@@ -1,0 +1,36 @@
+BEGIN {
+  line = 1;			# The line counter.
+  saw_template = 0;		# Set if we saw 'template' on the previous line.
+  entity = "";			# The current 'level 0' entity.
+}
+
+# Anything in column 0 is a level 0 entity, except accessibility keywords,
+# or when it looks like a comment, is an opening brace, a prototype declaration,
+# or a variable definition.
+/^[^#[:space:]]/ && !/^public:/ && !/^private:/ && !/^[/*{]/ && !/;$/ {
+  entity = $0
+}
+
+# A closing brace in column 0 means we left the current entity again.
+/^}/ {
+  entity = ""
+}
+
+# Do this for every line of the file.
+{
+  # If the previous line was "template<typename T>", then this line
+  # contains the entity name, even if it is indented.
+  if (saw_template)
+  {
+    entity = $0;
+    saw_template = 0;
+  }
+  printf("%20s:\t%s\n", entity, $0);
+  ++line
+}
+
+# Detect template declarations.
+/^[[:space:]]*template<.*>$/ {
+  saw_template = 1
+}
+
