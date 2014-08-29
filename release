@@ -5,7 +5,7 @@ echo $label > version
 name="cwautomacros-$label"
 mkdir "$name" || exit 1
 cat m4/CW_AUTOMACROS.m4.in | sed -e 's/@VERSION@/'"$label"'/' > m4/CW_AUTOMACROS.m4
-files=$(svn stat --verbose --non-interactive | sed -re 's/.*[[:space:]]//' -e 's/\.m4\.in/.m4/')
+files=$(git ls-tree --full-tree --name-only -r HEAD | sed -e 's/\.m4\.in/.m4/')
 for f in version $files; do
   if test -f "$f"; then
     dir=$(dirname "$f")
@@ -18,8 +18,5 @@ rm -rf "$name"
 
 ./release_doc
 
-echo "http://developer.berlios.de/project/admin/qrs.php?package_id=&group_id=6077"
+echo "https://github.com/CarloWood/cwautomacros/releases"
 echo "Release Name: $label"
-echo "File Type: Source .bz2"
-echo "Processor Type: Any"
-echo "Upload file: $(pwd)/$name.tar.bz2"

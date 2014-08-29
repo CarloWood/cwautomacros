@@ -1,1 +1,4 @@
-scp doc/index.php cwautomacros:doc
+cp doc/index.php README.md
+git add README.md
+echo "Commit changes to README.md"
+git diff --cached README.md
