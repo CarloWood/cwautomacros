@@ -66,7 +66,7 @@ else
       if test -f "/etc/ld.so.conf"; then
         cw_ld_so_conf_file_patterns="`egrep '^[[[:space:]]]*include[[[:space:]]]' /etc/ld.so.conf | sed -r -e 's/^[[[:space:]]]*include[[[:space:]]]+//;s/[[[:space:]]]*//g'`"
         cw_ld_so_conf_files="/etc/ld.so.conf `ls $cw_ld_so_conf_file_patterns`"
-	cw_library_path="$cw_library_path`cat $cw_ld_so_conf_files | \
+	cw_library_path="$cw_library_path`cat $cw_ld_so_conf_files 2>/dev/null | \
 	    sed -r -e 's/^[[[:space:]]]*include[[[:space:]]]+.*//;s/#.*//' -e 's/[[:space:]]*//g' -e 's/=[^=]*$//' | \
 	    grep -v '^$' | awk '{ printf("%s%s", "'$PATH_SEPARATOR'", $''1); }'`"
       fi
