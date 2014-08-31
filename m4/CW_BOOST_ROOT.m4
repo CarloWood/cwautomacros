@@ -1,5 +1,5 @@
 # CW_BOOST_ROOT m4 macro -- this file is part of cwautomacros.
-# Copyright (C) 2006 Carlo Wood <carlo@alinoe.com>
+# Copyright (C) 2006, 2014 Carlo Wood <carlo@alinoe.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,15 +62,19 @@ else
       # Windows (cygwin and mingw32) demand that all dll's are in PATH or the current directory.
       cw_library_path="$PATH:."
     else
-      cw_library_path="$LD_LIBRARY_PATH"
+      cw_library_path="`echo $LD_LIBRARY_PATH | sed -e 's/^://;s/:://g;s/:$//'`"
       if test -f "/etc/ld.so.conf"; then
-	cw_library_path="$cw_library_path`cat /etc/ld.so.conf | \
-	    sed -e 's/#.*//' -e 's/[[:space:]]*//g' -e 's/=[^=]*$//' | \
+        cw_ld_so_conf_file_patterns="`egrep '^[[[:space:]]]*include[[[:space:]]]' /etc/ld.so.conf | sed -r -e 's/^[[[:space:]]]*include[[[:space:]]]+//;s/[[[:space:]]]*//g'`"
+        cw_ld_so_conf_files="/etc/ld.so.conf `ls $cw_ld_so_conf_file_patterns`"
+	cw_library_path="$cw_library_path`cat $cw_ld_so_conf_files | \
+	    sed -r -e 's/^[[[:space:]]]*include[[[:space:]]]+.*//;s/#.*//' -e 's/[[:space:]]*//g' -e 's/=[^=]*$//' | \
 	    grep -v '^$' | awk '{ printf("%s%s", "'$PATH_SEPARATOR'", $''1); }'`"
       fi
       cw_library_path="$cw_library_path$PATH_SEPARATOR/lib$PATH_SEPARATOR/usr/lib"
     fi
     # Now run over all paths and look for a directory with boost libraries in it.
+    cw_boost_build="/$ac_build_alias"
+    while test "$cw_version" = "0_0000" -a -n "$cw_boost_build"; do
     cw_save_IFS=$IFS; IFS=$PATH_SEPARATOR
     for d in $cw_library_path
     do
@@ -84,7 +88,7 @@ else
 	  # This magic gets a lists of all versions, and filters out the highest version of that.
 	  # The number behind the underscore is prepended with zeroes to a total length of four digits however.
 	  dnl The double [[...]] below are needed to escape m4, it will result in [...] in the configure script.
-	  cw_possible_version_set="`ls "$cw_possible_root"/lib/libboost* 2>/dev/null | \
+	  cw_possible_version_set="`ls "$cw_possible_root"/lib$cw_boost_build/libboost* 2>/dev/null | \
 	      egrep '.*(-[[0-9_]]*\.(so$|so\.|a$|dll$|lib$)|\.so\.[[0-9]]+\.[[0-9]]+(\.[[0-9]]+)?$)' | \
 	      sed -e 's/.*-\([[0-9_]]*\)\.so$/\1/' \
 	          -e 's/.*-\([[0-9_]]*\)\.so\..*/\1/' \
@@ -110,6 +114,14 @@ else
 [dnl
 	fi
       fi
+    done
+    if test "$cw_version" = "0_0000"; then
+      if expr match "$cw_boost_build" '.*-unknown-.*' >/dev/null; then
+        cw_boost_build="`echo $cw_boost_build | sed -e 's/-unknown//'`"
+      else
+        cw_boost_build=
+      fi
+    fi
     done
   fi
 fi

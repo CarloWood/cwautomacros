@@ -1,5 +1,5 @@
 # CW_BOOST_TOOLSET m4 macro -- this file is part of cwautomacros.
-# Copyright (C) 2006, 2011 Carlo Wood <carlo@alinoe.com>
+# Copyright (C) 2006, 2011, 2014 Carlo Wood <carlo@alinoe.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ if expr match "$BOOST_VERSION" '[[0-9]]*\.[[0-9]]*$' >/dev/null; then
   cw_cv_lib_boost_toolset="none"
 elif test "$cw_cv_lib_boost_toolset" = "not found" -a -n "$BOOST_ROOT" -a -n "$BOOST_VERSION"; then
   dnl The double [[...]] below are needed to escape m4, it will result in [...] in the configure script.
-  cw_cv_lib_boost_toolset="`ls "$BOOST_ROOT"/lib/libboost* 2>/dev/null | \
+  cw_cv_lib_boost_toolset="`ls "$BOOST_ROOT"/lib$cw_boost_build/libboost* 2>/dev/null | \
       egrep '.*-'$BOOST_VERSION'\.(so$|so\.|a$|dll$|lib$)' | \
       sed -r -e 's%.*/libboost_[[^/-]]*-([[^./-]]*).*-'$BOOST_VERSION'\.(so|so\..*|a|dll|lib)$%\1%' | \
       egrep -v '(^mt$|libboost_)' | sort -u`"
@@ -65,7 +65,7 @@ else
   if expr `echo "$cw_cv_lib_boost_toolset" | wc -l` \> 1 >/dev/null || \
      expr match "$cw_cv_lib_boost_toolset" '[[^ ]] [[^ ]]' >/dev/null; then
     unset cw_cv_lib_boost_toolset
-    AC_MSG_ERROR([Cannot determine toolset, you have more than one installed in $BOOST_ROOT/lib!
+    AC_MSG_ERROR([Cannot determine toolset, you have more than one installed in $BOOST_ROOT/lib$cw_boost_build!
 Please specify the toolset to use with --enable-boost-toolset=toolset])
   fi
 fi

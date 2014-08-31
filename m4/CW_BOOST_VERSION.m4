@@ -1,5 +1,5 @@
 # CW_BOOST_VERSION m4 macro -- this file is part of cwautomacros.
-# Copyright (C) 2006, 2011 Carlo Wood <carlo@alinoe.com>
+# Copyright (C) 2006, 2011, 2014 Carlo Wood <carlo@alinoe.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,20 +41,27 @@ cw_cv_lib_boost_version=none
 # Use the environment variable BOOST_VERSION when already set to a sane value.
 cw_cv_lib_boost_version="`echo "$BOOST_VERSION" | grep '^[[1-9]][[0-9]]*[[._]][[0-9]][[0-9]]*$'`"
 if test -z "$cw_cv_lib_boost_version" -a -n "$BOOST_ROOT"; then
-  dnl The double [[...]] below are needed to escape m4, it will result in [...] in the configure script.
-  cw_cv_lib_boost_version="`ls "$BOOST_ROOT"/lib/libboost* 2>/dev/null | \
-      egrep '.*(-[[0-9_]]*\.(so$|so\.|a$|dll$|lib$)|\.so\.[[0-9]]+\.[[0-9]]+(\.[[0-9]]+)?$)' | \
-      sed -e 's/.*-\([[0-9_]]*\)\.so$/\1/' \
-	  -e 's/.*-\([[0-9_]]*\)\.so\..*/\1/' \
-	  -e 's/.*-\([[0-9_]]*\)\.a$/\1/' \
-	  -e 's/.*-\([[0-9_]]*\)\.dll$/\1/' \
-	  -e 's/.*-\([[0-9_]]*\)\.lib$/\1/' \
-	  -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)\.[[0-9]]*$/\1/' \
-	  -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)$/\1/' \
-	  -e 's/\([[0-9]]\)*\([[._]]\)\([[0-9]]*\)/\1_\3 \1\2\3/' \
-	  -e 's/_/_000/' -e 's/_[[0-9]]*\(....\) /_\1 /' \
-	  -e 's/_/./' | \
-      sort -nu | tail -n 1 | sed -e 's/.* //'`"
+  cw_cv_lib_boost_version="`ls -l "$BOOST_ROOT"/lib$cw_boost_build/libboost*.so 2>/dev/null | \
+    egrep '\.so\.[[0-9]]+\.[[0-9]]+(\.[[0-9]]+)?$' |
+    sed -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)\.[[0-9]]*$/\1/' \
+        -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)$/\1/' | \
+    sort -nu | tail -n 1 | sed -e 's/.* //'`"
+  if test -z "$cw_cv_lib_boost_version"; then
+    dnl The double [[...]] below are needed to escape m4, it will result in [...] in the configure script.
+    cw_cv_lib_boost_version="`ls "$BOOST_ROOT"/lib$cw_boost_build/libboost* 2>/dev/null | \
+	egrep '.*(-[[0-9_]]*\.(so$|so\.|a$|dll$|lib$)|\.so\.[[0-9]]+\.[[0-9]]+(\.[[0-9]]+)?$)' | \
+	sed -e 's/.*-\([[0-9_]]*\)\.so$/\1/' \
+	    -e 's/.*-\([[0-9_]]*\)\.so\..*/\1/' \
+	    -e 's/.*-\([[0-9_]]*\)\.a$/\1/' \
+	    -e 's/.*-\([[0-9_]]*\)\.dll$/\1/' \
+	    -e 's/.*-\([[0-9_]]*\)\.lib$/\1/' \
+	    -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)\.[[0-9]]*$/\1/' \
+	    -e 's/.*\.so\.\([[0-9]]*\.[[0-9]]*\)$/\1/' \
+	    -e 's/\([[0-9]]\)*\([[._]]\)\([[0-9]]*\)/\1_\3 \1\2\3/' \
+	    -e 's/_/_000/' -e 's/_[[0-9]]*\(....\) /_\1 /' \
+	    -e 's/_/./' | \
+	sort -nu | tail -n 1 | sed -e 's/.* //'`"
+  fi
 fi
 ])
 if test "$cw_cv_lib_boost_version" = "none"; then

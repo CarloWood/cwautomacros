@@ -1,5 +1,5 @@
 # CW_BOOST m4 macro -- this file is part of cwautomacros.
-# Copyright (C) 2006 Carlo Wood <carlo@alinoe.com>
+# Copyright (C) 2006, 2014 Carlo Wood <carlo@alinoe.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ AC_DEFUN([CW_BOOST],
 [dnl
 # Require cw_used_libcwd and cw_config_debug to be set already.
 AC_REQUIRE([CW_OPG_FLAGS])
-# Add a few configure scripts that allow the user to specify values that we might not be able to find outselfs.
+# Add a few configure scripts that allow the user to specify values that we might not be able to find ourselves.
 AC_ARG_ENABLE(boost-root, [dnl
   --enable-boost-root=/path/to/boost_root
                           specify the root path where boost is installed @<:@auto@:>@])
@@ -105,7 +105,7 @@ if test -n "$3"; then
 
   # Fix LIBS
   if test -n "$BOOST_ROOT" -a "$BOOST_ROOT" != "/usr"; then
-    LIBS="$LIBS -L\"$BOOST_ROOT/lib\""
+    LIBS="$LIBS -L\"$BOOST_ROOT/lib$cw_boost_build\""
   fi
 
   # Run over each requested library
@@ -117,7 +117,7 @@ if test -n "$3"; then
       LIBS="$LIBS -lboost_$cw_boost_lib_name"
     else
       # Get a list of possible runtime flags.
-      cw_boost_runtime_flags="`ls "$BOOST_ROOT"/lib/"$cw_boost_lib_prefix""boost_$cw_boost_lib_name-$BOOST_TOOLSET$cw_boost_threading"*"-$BOOST_VERSION.$cw_boost_lib_postfix" | \
+      cw_boost_runtime_flags="`ls "$BOOST_ROOT"/lib"$cw_boost_build/$cw_boost_lib_prefix""boost_$cw_boost_lib_name-$BOOST_TOOLSET$cw_boost_threading"*"-$BOOST_VERSION.$cw_boost_lib_postfix" | \
 	grep "$cw_boost_lib_prefix""boost_$cw_boost_lib_name-$BOOST_TOOLSET$cw_boost_threading-[[dgnpsy]]*-$BOOST_VERSION\.$cw_boost_lib_postfix\$" | \
 	sed -e 's/.*boost_'$cw_boost_lib_name-$BOOST_TOOLSET$cw_boost_threading'-\([[dgnpsy]]*\)-'$BOOST_VERSION'\.'$cw_boost_lib_postfix'$/\1/' | \
 	sort -u`"
