@@ -6,7 +6,7 @@
 
 <h2>cwautomacros: a collection of autoconf m4 macros</h2>
 
-<p>This project is intended for <em>developers</em> who downloaded a project with SVN/git
+<p>This project is intended for <em>developers</em> who downloaded a project with git
 that uses <i>cwautomacros</i>.</p>
 
 <p>If you have been sent here after running `autogen.sh', then
