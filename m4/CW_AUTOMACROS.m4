@@ -30,7 +30,7 @@ AC_DEFUN([CW_AUTOMACROS], [dnl
 dnl Check cwautomacros version.
 minver=$1
 test -n "$minver" || minver=0
-if test 20140831 -lt $minver; then
+if test 20160921 -lt $minver; then
   AC_MSG_ERROR([cwautomacros version $minver or later is required.])
 fi
 dnl Detect unexpanded macros.

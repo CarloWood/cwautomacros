@@ -41,7 +41,7 @@ AC_DEFUN([CW_TYPE_EXTRACT_FROM],
 template<typename ARG>
   void detect_type(ARG)
   {
-    return 1;
+    return reinterpret_cast<ARG*>(0);
   }
 EOF
 echo $ac_n "template<typename ARG0[,] $ac_c" >> conftest.$ac_ext
