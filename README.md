@@ -10,8 +10,7 @@
 that uses <i>cwautomacros</i>.</p>
 
 <p>If you have been sent here after running `autogen.sh', then
-get the cwautomacros sources with <a href="https://github.com/CarloWood/cwautomacros">Anonymous git access</a>,
-or download the latest (source) <a href="https://github.com/CarloWood/cwautomacros/releases">tar ball</a>.
+get the cwautomacros sources with <a href="https://github.com/CarloWood/cwautomacros">Anonymous git access</a>.
 To install simply untar and run <code>sudo make install</code>; no compilation is needed.</p>
 
 <p>It's all plug-and-play: the files and scripts are installed under <code>/usr/share/cwautomacros</code>
